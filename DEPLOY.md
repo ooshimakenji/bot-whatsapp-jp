@@ -66,20 +66,44 @@ cd bot-whatsapp-jp
 npm install
 ```
 
-## 5. Configurar variáveis de ambiente
+## 5. Configurar variáveis de ambiente (SSM Parameter Store)
+
+O bot busca as chaves do AWS SSM Parameter Store em produção. Isso é mais seguro que deixar um `.env` no servidor.
+
+### 5.1 Criar IAM Role para a EC2
+
+1. No console AWS → **IAM** → **Roles** → **Create Role**
+2. Trusted entity: **AWS Service** → **EC2**
+3. Permissões: buscar e adicionar **AmazonSSMReadOnlyAccess**
+4. Nome: `bot-whatsapp-jp-role`
+5. **Create Role**
+
+### 5.2 Atrelar a Role à EC2
+
+1. No console **EC2** → selecionar a instância
+2. **Actions** → **Security** → **Modify IAM Role**
+3. Selecionar `bot-whatsapp-jp-role`
+4. **Update IAM Role**
+
+### 5.3 Criar os parâmetros no SSM
+
+No console AWS → **Systems Manager** → **Parameter Store** → **Create parameter**:
+
+| Nome | Tipo | Valor |
+|------|------|-------|
+| `/bot-whatsapp-jp/GROQ_API_KEY` | SecureString | sua_chave_groq |
+| `/bot-whatsapp-jp/SUPABASE_URL` | String | sua_url_supabase |
+| `/bot-whatsapp-jp/SUPABASE_KEY` | SecureString | sua_chave_supabase |
+
+### 5.4 Criar .env mínimo na EC2
+
+Só precisa do `NODE_ENV` para ativar o SSM:
 
 ```bash
-nano .env
+echo "NODE_ENV=production" > .env
 ```
 
-Colar o conteúdo:
-```
-GROQ_API_KEY=sua_chave_groq
-SUPABASE_URL=sua_url_supabase
-SUPABASE_KEY=sua_chave_supabase
-```
-
-Salvar: `Ctrl+O`, `Enter`, `Ctrl+X`
+> **Dev local:** No seu PC, continue usando `.env` normal com todas as chaves. O bot detecta `NODE_ENV` e só busca SSM em produção.
 
 ## 6. Iniciar com PM2
 
