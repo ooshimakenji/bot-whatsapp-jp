@@ -1,4 +1,4 @@
-const { supabase } = require('../services/supabase');
+const { getSupabase } = require('../services/supabase');
 
 function gerarCodigoPromocao() {
   const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
@@ -12,7 +12,7 @@ function gerarCodigoPromocao() {
 async function criarPromocao(dados) {
   const codigo = gerarCodigoPromocao();
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('promocoes')
     .insert([{ ...dados, codigo }])
     .select()
@@ -29,7 +29,7 @@ async function criarPromocao(dados) {
 async function buscarPromocoesAtivas(clienteId) {
   const hoje = new Date().toISOString().split('T')[0];
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('promocoes')
     .select('*')
     .eq('cliente_id', clienteId)
@@ -45,7 +45,7 @@ async function buscarPromocoesAtivas(clienteId) {
 }
 
 async function usarPromocao(codigo) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('promocoes')
     .update({ usado: true })
     .eq('codigo', codigo)
@@ -62,7 +62,7 @@ async function usarPromocao(codigo) {
 }
 
 async function buscarPromocaoPorCodigo(codigo) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('promocoes')
     .select('*, clientes(*)')
     .eq('codigo', codigo)
@@ -105,7 +105,7 @@ async function buscarClientesParaPromocao6Meses() {
   const seisMesesAtras = new Date();
   seisMesesAtras.setMonth(seisMesesAtras.getMonth() - 6);
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('servicos')
     .select('clientes(*)')
     .eq('status', 'concluido')
@@ -135,7 +135,7 @@ async function buscarClientesParaPromocaoAnual() {
   const umAnoAtras = new Date();
   umAnoAtras.setFullYear(umAnoAtras.getFullYear() - 1);
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('servicos')
     .select('clientes(*)')
     .eq('status', 'concluido')

@@ -1,7 +1,7 @@
-const { supabase } = require('../services/supabase');
+const { getSupabase } = require('../services/supabase');
 
 async function criarOrcamento(dados) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('orcamentos')
     .insert([dados])
     .select()
@@ -16,7 +16,7 @@ async function criarOrcamento(dados) {
 }
 
 async function buscarOrcamentoPorServico(servicoId) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('orcamentos')
     .select('*')
     .eq('servico_id', servicoId)
@@ -30,7 +30,7 @@ async function buscarOrcamentoPorServico(servicoId) {
 }
 
 async function atualizarOrcamento(id, dados) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('orcamentos')
     .update(dados)
     .eq('id', id)
@@ -55,7 +55,7 @@ async function registrarPagamento(id, valorPago) {
 }
 
 async function buscarOrcamentoPorId(id) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('orcamentos')
     .select('*')
     .eq('id', id)

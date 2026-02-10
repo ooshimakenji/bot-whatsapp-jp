@@ -1,7 +1,7 @@
-const { supabase } = require('../services/supabase');
+const { getSupabase } = require('../services/supabase');
 
 async function criarServico(dados) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('servicos')
     .insert([dados])
     .select()
@@ -16,7 +16,7 @@ async function criarServico(dados) {
 }
 
 async function buscarServicoPorId(id) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('servicos')
     .select('*, clientes(*), orcamentos(*)')
     .eq('id', id)
@@ -31,7 +31,7 @@ async function buscarServicoPorId(id) {
 }
 
 async function buscarServicosPorCliente(clienteId) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('servicos')
     .select('*, orcamentos(*)')
     .eq('cliente_id', clienteId)
@@ -46,7 +46,7 @@ async function buscarServicosPorCliente(clienteId) {
 }
 
 async function buscarServicoPendente(clienteId) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('servicos')
     .select('*, orcamentos(*)')
     .eq('cliente_id', clienteId)
@@ -63,7 +63,7 @@ async function buscarServicoPendente(clienteId) {
 }
 
 async function atualizarServico(id, dados) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('servicos')
     .update(dados)
     .eq('id', id)
@@ -85,7 +85,7 @@ async function buscarServicosAgendadosParaData(data) {
   const fimDia = new Date(data);
   fimDia.setHours(23, 59, 59, 999);
 
-  const { data: servicos, error } = await supabase
+  const { data: servicos, error } = await getSupabase()
     .from('servicos')
     .select('*, clientes(*)')
     .eq('status', 'agendado')
@@ -105,7 +105,7 @@ async function buscarServicosParaLembrete() {
   const amanha = new Date(agora);
   amanha.setDate(amanha.getDate() + 1);
 
-  const { data: servicos, error } = await supabase
+  const { data: servicos, error } = await getSupabase()
     .from('servicos')
     .select('*, clientes(*)')
     .eq('status', 'agendado')

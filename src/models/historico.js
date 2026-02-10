@@ -1,10 +1,10 @@
-const { supabase } = require('../services/supabase');
+const { getSupabase } = require('../services/supabase');
 
 const LIMITE_HISTORICO = 10; // Últimas 10 mensagens para contexto
 const JANELA_HORAS = 24; // Só puxa mensagens das últimas 24h
 
 async function salvarMensagem(clienteId, role, mensagem) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('historico')
     .insert([{ cliente_id: clienteId, role, mensagem }])
     .select()
@@ -21,7 +21,7 @@ async function salvarMensagem(clienteId, role, mensagem) {
 async function buscarHistorico(clienteId, limite = LIMITE_HISTORICO) {
   const desde = new Date(Date.now() - JANELA_HORAS * 60 * 60 * 1000).toISOString();
 
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('historico')
     .select('*')
     .eq('cliente_id', clienteId)
@@ -40,7 +40,7 @@ async function buscarHistorico(clienteId, limite = LIMITE_HISTORICO) {
 
 async function limparHistoricoAntigo(clienteId, manterUltimas = 50) {
   // Busca IDs das mensagens a manter
-  const { data: mensagensRecentes } = await supabase
+  const { data: mensagensRecentes } = await getSupabase()
     .from('historico')
     .select('id')
     .eq('cliente_id', clienteId)
@@ -52,7 +52,7 @@ async function limparHistoricoAntigo(clienteId, manterUltimas = 50) {
   const idsParaManter = mensagensRecentes.map(m => m.id);
 
   // Deleta mensagens antigas
-  const { error } = await supabase
+  const { error } = await getSupabase()
     .from('historico')
     .delete()
     .eq('cliente_id', clienteId)

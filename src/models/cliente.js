@@ -1,7 +1,7 @@
-const { supabase } = require('../services/supabase');
+const { getSupabase } = require('../services/supabase');
 
 async function buscarClientePorTelefone(telefone) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('clientes')
     .select('*')
     .eq('telefone', telefone)
@@ -15,7 +15,7 @@ async function buscarClientePorTelefone(telefone) {
 }
 
 async function criarCliente(dados) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('clientes')
     .insert([dados])
     .select()
@@ -30,7 +30,7 @@ async function criarCliente(dados) {
 }
 
 async function atualizarCliente(id, dados) {
-  const { data, error } = await supabase
+  const { data, error } = await getSupabase()
     .from('clientes')
     .update(dados)
     .eq('id', id)
