@@ -9,9 +9,8 @@
 3. AMI: **Ubuntu 24.04 LTS** (Free tier eligible)
 4. Tipo: **t2.micro** (Free tier)
 5. Key pair: Criar novo → nome `bot-whatsapp-jp` → Download `.pem`
-6. Security Group: criar novo com regras:
-   - SSH (porta 22) - Seu IP
-   - HTTP (porta 3000) - Anywhere (para health check)
+6. Security Group: criar novo com regra:
+   - SSH (porta 22) - My IP
 7. Storage: 8 GB gp3 (padrão)
 8. **Launch**
 
@@ -78,7 +77,6 @@ Colar o conteúdo:
 GROQ_API_KEY=sua_chave_groq
 SUPABASE_URL=sua_url_supabase
 SUPABASE_KEY=sua_chave_supabase
-PORT=3000
 ```
 
 Salvar: `Ctrl+O`, `Enter`, `Ctrl+X`
@@ -146,15 +144,9 @@ pm2 restart bot-whatsapp-jp
 pm2 logs bot-whatsapp-jp
 ```
 
-## 10. Health check
+## 10. Verificar se o bot está rodando
 
-Testar se o servidor está respondendo:
 ```bash
-curl http://localhost:3000/health
-# Deve retornar: {"status":"ok"}
-```
-
-De fora (usando IP público):
-```
-http://SEU_IP_PUBLICO:3000/health
+pm2 status
+# Deve mostrar "online" no status do bot-whatsapp-jp
 ```
