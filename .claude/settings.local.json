@@ -7,7 +7,8 @@
       "Bash(findstr:*)",
       "Bash(gh auth status:*)",
       "Bash(git add:*)",
-      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: implementa bot completo com IA, banco de dados e agendamento\n\n- Adiciona integração com Google Gemini para conversação e análise de imagens\n- Implementa models para Supabase \\(clientes, serviços, orçamentos, histórico, promoções\\)\n- Cria controller do bot com lógica de atendimento\n- Adiciona respostas automáticas para economizar chamadas à API\n- Implementa rate limiting para proteção contra abuso\n- Adiciona scheduler para lembretes e promoções automáticas\n- Cria tabela de preços com estimativa automática\n- Adiciona análise de imagem para detectar lugares do sofá\n- Inclui schema SQL para Supabase\n- Documenta fluxo do sistema e roadmap\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git commit -m \"$\\(cat <<''EOF''\nfeat: implementa bot completo com IA, banco de dados e agendamento\n\n- Adiciona integração com Google Gemini para conversação e análise de imagens\n- Implementa models para Supabase \\(clientes, serviços, orçamentos, histórico, promoções\\)\n- Cria controller do bot com lógica de atendimento\n- Adiciona respostas automáticas para economizar chamadas à API\n- Implementa rate limiting para proteção contra abuso\n- Adiciona scheduler para lembretes e promoções automáticas\n- Cria tabela de preços com estimativa automática\n- Adiciona análise de imagem para detectar lugares do sofá\n- Inclui schema SQL para Supabase\n- Documenta fluxo do sistema e roadmap\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git push:*)"
     ]
   }
 }

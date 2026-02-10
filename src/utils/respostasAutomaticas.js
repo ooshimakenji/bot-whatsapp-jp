@@ -33,152 +33,186 @@ const SAUDACOES = {
   palavras: ['oi', 'ola', 'bom dia', 'boa tarde', 'boa noite', 'hey', 'eae', 'eai', 'salve', 'fala'],
   resposta: (hora) => {
     const saudacao = hora < 12 ? 'Bom dia' : hora < 18 ? 'Boa tarde' : 'Boa noite';
-    return `${saudacao}! Bem-vindo(a) à JP empresa Teste!
+    return `${saudacao}! 👋 Aqui é o André, da JP empresa Teste!
 
-Trabalhamos com:
-- Limpeza de sofá
-- Higienização de ar-condicionado
+Trabalho com:
+🛋️ Limpeza de sofá
+❄️ Higienização de ar-condicionado
 
-Como posso te ajudar hoje?`;
+Como posso te ajudar hoje? 😊`;
   }
 };
 
 const PRECO_VALOR = {
-  palavras: ['quanto custa', 'qual o preco', 'qual o valor', 'quanto fica', 'quanto e', 'quanto sai', 'tabela de preco', 'valores'],
-  resposta: `Para passar um orçamento certinho, preciso de algumas informações:
+  palavras: ['quanto custa', 'qual o preco', 'qual o valor', 'quanto fica', 'quanto e', 'quanto sai', 'tabela de preco', 'valores', 'orcamento', 'quero orcamento', 'fazer orcamento', 'pedir orcamento'],
+  resposta: `Claro! 😄 Aqui estão meus preços base:
 
-Para *sofá*:
-- Quantos lugares?
-- Material (tecido ou couro)?
-- Tem manchas?
-- Tem pets?
+*🛋️ Limpeza de Sofá:*
+- Poltrona: R$ 80
+- 2 lugares: R$ 120
+- 3 lugares: R$ 150
+- 4 lugares: R$ 200
+- 5 lugares: R$ 250
+- 6+ lugares: R$ 300
 
-Para *ar-condicionado*:
-- Tipo (split, janela, cassete)?
-- Quantos BTUs?
+*❄️ Ar-Condicionado:*
+- Split: R$ 120
+- Janela: R$ 80
+- Cassete: R$ 180
 
-Me conta o que você precisa e te passo o valor!`
+⚠️ Pode ter adicional por material (couro +R$30), manchas difíceis (+R$30) ou pet em casa (+R$25). O valor final confirmo após ver pessoalmente.
+
+Me conta o que você precisa! 👇`
 };
 
 const SOFA_INTERESSE = {
   palavras: ['limpar sofa', 'limpeza de sofa', 'lavar sofa', 'higienizar sofa', 'sofa sujo', 'limpar o sofa', 'limpeza sofa'],
-  resposta: `Ótimo! Fazemos limpeza profissional de sofá.
+  resposta: `Ótimo! 🛋️ Faço limpeza profissional de sofá.
 
-Para o orçamento, me conta:
-1. Quantos lugares tem o sofá?
-2. É de tecido ou couro?
-3. Tem manchas difíceis?
-4. Tem pets em casa?
+💰 Os preços base são:
+- Poltrona: R$ 80
+- 2 lugares: R$ 120
+- 3 lugares: R$ 150
+- 4+ lugares: a partir de R$ 200
 
-Se preferir, manda uma foto do sofá!`
+Para te dar o valor certinho, me conta:
+1️⃣ Quantos lugares tem o sofá?
+2️⃣ É de tecido ou couro?
+3️⃣ Tem manchas difíceis?
+4️⃣ Tem pets em casa? 🐾
+
+Se preferir, manda uma foto do sofá! 📸`
 };
 
 const AR_INTERESSE = {
   palavras: ['limpar ar', 'limpeza de ar', 'higienizar ar', 'ar condicionado', 'ar-condicionado', 'split', 'limpeza ar'],
-  resposta: `Perfeito! Fazemos higienização de ar-condicionado.
+  resposta: `Perfeito! ❄️ Faço higienização de ar-condicionado.
 
-Para o orçamento, me conta:
-1. Qual o tipo? (split, janela, cassete)
-2. Sabe quantos BTUs?
-3. Quando foi a última limpeza?
+💰 Os preços base são:
+- Split: R$ 120
+- Janela: R$ 80
+- Cassete: R$ 180
+- Piso-teto: R$ 150
 
-Assim consigo te passar o valor certinho!`
+Me conta:
+1️⃣ Qual o tipo do seu?
+2️⃣ Sabe quantos BTUs?
+3️⃣ Quando foi a última limpeza?
+
+Assim te passo o valor certinho! 😉`
 };
 
 const AMBOS_INTERESSE = {
   palavras: ['sofa e ar', 'ar e sofa', 'os dois', 'ambos', 'tudo', 'completo'],
-  resposta: `Show! Podemos fazer os dois serviços.
+  resposta: `Show! 🔥 Posso fazer os dois serviços.
 
-Me conta sobre o *sofá*:
+Me conta sobre o *🛋️ sofá*:
 - Quantos lugares? Tecido ou couro?
 
-E sobre o *ar-condicionado*:
+E sobre o *❄️ ar-condicionado*:
 - Qual tipo? (split, janela, cassete)
 
-Fazendo os dois juntos, geralmente conseguimos um precinho melhor!`
+Fazendo os dois juntos, geralmente consigo um precinho melhor! 💪`
 };
 
 const FORMAS_PAGAMENTO = {
   palavras: ['forma de pagamento', 'como pagar', 'aceita pix', 'aceita cartao', 'parcelamento', 'parcela', 'pix', 'cartao'],
-  resposta: `Aceitamos:
+  resposta: `Aceitamos 💳:
 
-- PIX (na hora)
-- Dinheiro
-- Cartão de débito
-- Cartão de crédito
+✅ PIX (na hora)
+✅ Dinheiro
+✅ Cartão de débito
+✅ Cartão de crédito
 
-Para cartão de crédito, consulte condições de parcelamento com o André.`
+Para cartão de crédito, me consulte sobre condições de parcelamento! 😊`
 };
 
 const ENDERECO_ATENDIMENTO = {
   palavras: ['onde fica', 'endereco', 'localizacao', 'qual regiao', 'atende em', 'vai ate', 'regiao de atendimento'],
-  resposta: `Atendemos em domicílio! Vamos até você.
+  resposta: `Atendo em domicílio! 🏠 Vou até você.
 
-Qual seu endereço/bairro? Assim confirmo se atendemos na sua região.`
+Qual seu endereço/bairro? Assim confirmo se atendo na sua região! 📍`
 };
 
 const TEMPO_SERVICO = {
   palavras: ['quanto tempo demora', 'quanto tempo leva', 'demora muito', 'tempo de servico', 'dura quanto', 'quanto tempo dura'],
-  resposta: `O tempo varia conforme o serviço:
+  resposta: `⏱️ O tempo varia conforme o serviço:
 
-*Sofá:*
+*🛋️ Sofá:*
 - 2 lugares: ~40 min
 - 3 lugares: ~1 hora
 - 4+ lugares: ~1h30
 
-*Ar-condicionado:*
+*❄️ Ar-condicionado:*
 - Split simples: ~1 hora
 - Mais unidades: consultar
 
-O André confirma o tempo exato no orçamento!`
+Confirmo o tempo exato no orçamento! 😉`
 };
 
 const AGENDAMENTO = {
   palavras: ['agendar', 'marcar', 'quando pode', 'data disponivel', 'horario disponivel', 'disponibilidade'],
-  resposta: `Para agendar, me diz:
+  resposta: `📅 Para agendar, me diz:
 
-1. Qual serviço? (sofá, ar ou ambos)
-2. Qual dia da semana é melhor?
-3. Prefere manhã ou tarde?
+1️⃣ Qual serviço? (sofá, ar ou ambos)
+2️⃣ Qual dia da semana é melhor?
+3️⃣ Prefere manhã ou tarde?
 
-Vou verificar a agenda do André e te confirmo!`
+Vou verificar minha agenda e te confirmo! ✅`
 };
 
 const GARANTIA = {
   palavras: ['tem garantia', 'garantia', 'se nao ficar bom', 'resultado garantido'],
-  resposta: `Sim! Trabalhamos com garantia de satisfação.
+  resposta: `Sim! ✅ Trabalho com garantia de satisfação.
 
-Se após o serviço você identificar algo que não ficou bom, é só chamar que voltamos para ajustar, sem custo adicional.
+Se após o serviço você identificar algo que não ficou bom, é só chamar que volto para ajustar, sem custo adicional.
 
-Nosso objetivo é você ficar 100% satisfeito!`
+Meu objetivo é você ficar 100% satisfeito! 💯`
 };
 
 const PRODUTOS = {
   palavras: ['que produto usa', 'produto quimico', 'e seguro', 'seguro para crianca', 'seguro para pet', 'produto utilizado'],
-  resposta: `Usamos produtos profissionais e seguros!
+  resposta: `Uso produtos profissionais e seguros! 🧴
 
-- Biodegradáveis
-- Seguros para crianças e pets
-- Sem cheiro forte
-- Secagem rápida
+✅ Biodegradáveis
+✅ Seguros para crianças e pets 🐾
+✅ Sem cheiro forte
+✅ Secagem rápida
 
-Após a limpeza, recomendamos aguardar ~2 horas antes de usar o sofá. O ar pode ligar normalmente após o serviço.`
+Após a limpeza, recomendo aguardar ~2 horas antes de usar o sofá. O ar pode ligar normalmente após o serviço. 👍`
+};
+
+const SERVICOS_INFO = {
+  palavras: ['o que voce faz', 'o que voces fazem', 'quais servicos', 'que servico', 'como funciona', 'me ajudar', 'pode me ajudar', 'o que oferece', 'o que oferecem'],
+  resposta: `Trabalho com dois serviços principais:
+
+*🛋️ Limpeza de Sofá*
+- Limpeza profunda
+- Remoção de manchas
+- Higienização completa
+
+*❄️ Ar-Condicionado*
+- Higienização
+- Limpeza de filtros
+- Manutenção preventiva
+
+Qual serviço te interessa? 😊`
 };
 
 const AGRADECIMENTO = {
   palavras: ['obrigado', 'obrigada', 'valeu', 'muito obrigado', 'agradeco', 'thanks', 'vlw'],
-  resposta: `Por nada! Fico à disposição.
+  resposta: `Por nada! 😊 Fico à disposição.
 
-Se precisar de algo mais, é só chamar aqui. Até mais!`
+Se precisar de algo mais, é só chamar aqui. Até mais! 👋`
 };
 
 const TCHAU = {
   palavras: ['tchau', 'ate mais', 'ate logo', 'falou', 'flw', 'bye', 'adeus'],
-  resposta: `Até mais!
+  resposta: `Até mais! 👋
 
 Quando precisar de limpeza de sofá ou ar-condicionado, é só chamar.
 
-JP empresa Teste - Sempre à disposição!`
+André - JP empresa Teste 💪`
 };
 
 const OK_CONFIRMACAO = {
@@ -200,8 +234,35 @@ const RESPOSTAS = [
   AGENDAMENTO,
   GARANTIA,
   PRODUTOS,
+  SERVICOS_INFO, // Perguntas sobre serviços
   SAUDACOES, // Saudações por último (são mais genéricas)
 ];
+
+/**
+ * Verifica se a mensagem parece ser uma resposta com dados/informações
+ * Essas devem ir para o Gemini processar
+ */
+function pareceRespostaComDados(mensagem) {
+  const texto = normalizar(mensagem);
+
+  // Contém números (provavelmente está informando quantidade, lugares, BTUs, etc)
+  if (/\d/.test(mensagem)) {
+    return true;
+  }
+
+  // Palavras que indicam resposta com informação específica
+  const palavrasInfo = [
+    'lugares', 'lugar', 'tecido', 'couro', 'veludo', 'sintetico',
+    'manchas', 'manchado', 'sujo', 'suja',
+    'btus', 'btu', 'split', 'janela', 'cassete',
+    'sim tenho', 'nao tenho', 'tem sim', 'tem nao',
+    'moro', 'fica na', 'fica no', 'rua', 'avenida', 'bairro',
+    'segunda', 'terca', 'quarta', 'quinta', 'sexta', 'sabado', 'domingo',
+    'manha', 'tarde', 'noite'
+  ];
+
+  return palavrasInfo.some(p => texto.includes(p));
+}
 
 /**
  * Busca resposta automática para a mensagem
@@ -219,6 +280,11 @@ function buscarRespostaAutomatica(mensagem, contexto = {}) {
 
   // Ignora confirmações simples (deixa o Gemini decidir baseado no contexto)
   if (igualA(mensagem, ['ok', 'okay', 'sim', 'nao', 'não', 's', 'n', 'beleza', 'blz', 'certo'])) {
+    return null;
+  }
+
+  // Se parece ser uma resposta com dados, manda pro Gemini processar
+  if (pareceRespostaComDados(mensagem)) {
     return null;
   }
 

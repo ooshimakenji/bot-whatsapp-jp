@@ -1,4 +1,5 @@
-const { gerarResposta, analisarImagem, extrairIntencao } = require('../services/gemini');
+// Usa Groq (Llama) em vez de Gemini para evitar limites de quota
+const { gerarResposta, analisarImagem, extrairIntencao } = require('../services/groq');
 const {
   buscarOuCriarCliente,
   atualizarCliente,
@@ -28,6 +29,34 @@ const {
   verificarMensagem,
   verificarGemini,
 } = require('../utils/rateLimit');
+
+/**
+ * Simula digitação humana antes de enviar resposta
+ * @param {object} sock - Socket do WhatsApp
+ * @param {string} sender - ID do destinatário
+ * @param {string} resposta - Texto da resposta (para calcular delay)
+ */
+async function simularDigitacao(sock, sender, resposta) {
+  try {
+    // Mostra "digitando..." no WhatsApp
+    await sock.sendPresenceUpdate('composing', sender);
+
+    // Calcula delay baseado no tamanho da resposta
+    // Base: 1-2 segundos + ~20ms por caractere (simula digitação)
+    const baseDelay = 1000 + Math.random() * 1000; // 1-2 segundos
+    const charDelay = Math.min(resposta.length * 20, 3000); // máx 3 segundos extra
+    const totalDelay = baseDelay + charDelay;
+
+    // Aguarda o tempo calculado
+    await new Promise(resolve => setTimeout(resolve, totalDelay));
+
+    // Para de mostrar "digitando..."
+    await sock.sendPresenceUpdate('paused', sender);
+  } catch (error) {
+    // Ignora erros de presença (não é crítico)
+    console.log('Aviso: não foi possível simular digitação');
+  }
+}
 
 /**
  * Processa mensagem de texto recebida
@@ -77,17 +106,13 @@ async function processarMensagemTexto(sock, msg) {
     const promocoesAtivas = await buscarPromocoesAtivas(cliente.id);
 
     let respostaFinal;
-    let usouGemini = false;
+    let usouGroq = false;
 
-    // PRIMEIRO: Tenta resposta automática (economiza Gemini)
-    // Só usa resposta automática se NÃO tiver serviço pendente
-    // (para não atrapalhar o fluxo de coleta de dados)
-    if (!servicoPendente) {
-      const respostaAuto = buscarRespostaAutomatica(texto, { cliente, servicoPendente });
-      if (respostaAuto) {
-        respostaFinal = respostaAuto;
-        console.log(`[${telefone}] Resposta automática usada`);
-      }
+    // PRIMEIRO: Tenta resposta automática (economiza tokens)
+    const respostaAuto = buscarRespostaAutomatica(texto, { cliente, servicoPendente });
+    if (respostaAuto) {
+      respostaFinal = respostaAuto;
+      console.log(`[${telefone}] Resposta automática usada`);
     }
 
     // SEGUNDO: Se não teve resposta automática, usa Gemini
@@ -98,7 +123,7 @@ async function processarMensagemTexto(sock, msg) {
         console.log(`[${telefone}] Gemini bloqueado: ${limiteGemini.motivo}`);
         respostaFinal = limiteGemini.motivo;
       } else {
-        usouGemini = true;
+        usouGroq = true;
         const historicoConversa = await formatarHistoricoParaGemini(cliente.id);
 
         const contexto = {
@@ -117,21 +142,24 @@ async function processarMensagemTexto(sock, msg) {
 
         // Limpa resposta para enviar ao cliente
         respostaFinal = limparRespostaParaCliente(respostaCompleta);
-        console.log(`[${telefone}] Gemini usado`);
+        console.log(`[${telefone}] Groq/Llama usado`);
       }
     }
 
     // Salva resposta no histórico
     await salvarMensagem(cliente.id, 'assistant', respostaFinal);
 
+    // Simula digitação antes de enviar
+    await simularDigitacao(sock, sender, respostaFinal);
+
     // Envia resposta
     await sock.sendMessage(sender, { text: respostaFinal });
 
-    console.log(`[${telefone}] Resposta enviada (${usouGemini ? 'Gemini' : 'Auto'})`);
+    console.log(`[${telefone}] Resposta enviada (${usouGroq ? 'Groq' : 'Auto'})`);
   } catch (error) {
     console.error('Erro ao processar mensagem:', error);
     await sock.sendMessage(sender, {
-      text: 'Desculpe, estou com dificuldades técnicas. O André entrará em contato em breve!',
+      text: 'Desculpe, estou com dificuldades técnicas no momento. Me chama de novo em alguns minutos!',
     });
   }
 }
@@ -160,7 +188,7 @@ async function processarMensagemImagem(sock, msg) {
   if (!limiteGemini.permitido) {
     console.log(`[${telefone}] Gemini bloqueado para imagem: ${limiteGemini.motivo}`);
     await sock.sendMessage(sender, {
-      text: 'Recebi sua foto! Estou com muitas mensagens no momento. O André vai analisar e retornar em breve.',
+      text: 'Recebi sua foto! Estou com muitas mensagens no momento. Me manda de novo daqui a pouquinho que analiso pra você!',
     });
     return;
   }
@@ -256,14 +284,15 @@ async function processarMensagemImagem(sock, msg) {
       await salvarMensagem(cliente.id, 'user', caption);
     }
 
-    // Envia análise
+    // Simula digitação e envia análise
+    await simularDigitacao(sock, sender, respostaCliente);
     await sock.sendMessage(sender, { text: respostaCliente });
 
     console.log(`[${telefone}] Análise de imagem enviada (${dadosAnalise?.lugares || '?'} lugares detectados)`);
   } catch (error) {
     console.error('Erro ao processar imagem:', error);
     await sock.sendMessage(sender, {
-      text: 'Recebi sua foto! O André vai analisar e incluir no orçamento.',
+      text: 'Recebi sua foto! Me descreve o que tem na imagem que te passo uma estimativa de preço.',
     });
   }
 }

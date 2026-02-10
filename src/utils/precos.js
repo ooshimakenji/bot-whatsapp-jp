@@ -181,12 +181,12 @@ function gerarMensagemEstimativa(dados) {
 
   if (dados.tipo === 'sofa' && dados.lugares) {
     const estimativa = calcularPrecoSofa(dados);
-    return `\n\n*Estimativa de preço:* R$ ${estimativa.minimo} - R$ ${estimativa.maximo}\n_(valor final após avaliação do André)_`;
+    return `\n\n💰 Estimativa de preço:* R$ ${estimativa.minimo} - R$ ${estimativa.maximo}\n_(valor final confirmo após ver pessoalmente ✅)_`;
   }
 
   if (dados.tipo === 'ar_condicionado' && dados.modelo_ar) {
     const estimativa = calcularPrecoAr(dados);
-    return `\n\n*Estimativa de preço:* R$ ${estimativa.minimo} - R$ ${estimativa.maximo}\n_(valor final após avaliação do André)_`;
+    return `\n\n💰 Estimativa de preço:* R$ ${estimativa.minimo} - R$ ${estimativa.maximo}\n_(valor final confirmo após ver pessoalmente ✅)_`;
   }
 
   return null;
