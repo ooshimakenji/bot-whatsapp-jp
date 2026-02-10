@@ -16,7 +16,7 @@ async function carregarParametrosSSM() {
   console.log('Buscando parâmetros do SSM Parameter Store...');
 
   try {
-    const client = new SSMClient({ region: process.env.AWS_REGION || 'us-east-1' });
+    const client = new SSMClient({ region: process.env.AWS_REGION || 'us-east-2' });
 
     const command = new GetParametersByPathCommand({
       Path: SSM_PATH,
