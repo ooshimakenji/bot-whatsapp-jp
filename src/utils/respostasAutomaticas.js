@@ -270,15 +270,13 @@ function pareceRespostaComDados(mensagem) {
  * @param {object} contexto - Contexto do cliente (opcional)
  * @returns {string|null} - Resposta automática ou null para usar Gemini
  */
-function buscarRespostaAutomatica(mensagem, contexto = {}) {
+function buscarRespostaAutomatica(mensagem, _contexto = {}) {
   if (!mensagem || mensagem.length > 200) {
     // Mensagens muito longas provavelmente precisam do Gemini
     return null;
   }
 
-  const textoNormalizado = normalizar(mensagem);
-
-  // Ignora confirmações simples (deixa o Gemini decidir baseado no contexto)
+  // Ignora confirmações simples (deixa o Groq decidir baseado no contexto)
   if (igualA(mensagem, ['ok', 'okay', 'sim', 'nao', 'não', 's', 'n', 'beleza', 'blz', 'certo'])) {
     return null;
   }
