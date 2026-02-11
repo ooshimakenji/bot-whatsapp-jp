@@ -1,5 +1,5 @@
 // Usa Groq (Llama) em vez de Gemini para evitar limites de quota
-const { gerarResposta, analisarImagem, extrairIntencao } = require('../services/groq');
+const { gerarResposta, analisarImagem, transcreverAudio, extrairIntencao } = require('../services/groq');
 const {
   buscarOuCriarCliente,
   atualizarCliente,
@@ -338,6 +338,86 @@ async function processarInfoExtraida(cliente, servicoPendente, info) {
 }
 
 /**
+ * Processa mensagem de áudio - transcreve e responde
+ */
+async function processarMensagemAudio(sock, msg) {
+  const sender = msg.key.remoteJid;
+
+  if (isGrupo(sender)) return;
+
+  const telefone = extrairTelefone(sender);
+
+  const limiteMsg = verificarMensagem(telefone, '[audio]');
+  if (!limiteMsg.permitido) {
+    await sock.sendMessage(sender, { text: limiteMsg.motivo });
+    return;
+  }
+
+  console.log(`[${telefone}] Áudio recebido`);
+
+  try {
+    const cliente = await buscarOuCriarCliente(telefone);
+    if (!cliente) return;
+
+    // Baixa o áudio
+    const audioMessage = msg.message.audioMessage;
+    const stream = await sock.downloadMediaMessage(msg);
+    const chunks = [];
+    for await (const chunk of stream) {
+      chunks.push(chunk);
+    }
+    const buffer = Buffer.concat(chunks);
+
+    // Transcreve com Whisper
+    const mimeType = audioMessage.mimetype || 'audio/ogg; codecs=opus';
+    const textoTranscrito = await transcreverAudio(buffer, mimeType);
+
+    if (!textoTranscrito) {
+      await sock.sendMessage(sender, {
+        text: 'Não consegui entender o áudio. Pode mandar por texto? 😊',
+      });
+      return;
+    }
+
+    console.log(`[${telefone}] Áudio transcrito: ${textoTranscrito}`);
+
+    // Salva a transcrição como mensagem do usuário
+    await salvarMensagem(cliente.id, 'user', `[Áudio] ${textoTranscrito}`);
+
+    // Processa como texto normal via Groq
+    const servicoPendente = await buscarServicoPendente(cliente.id);
+    const promocoesAtivas = await buscarPromocoesAtivas(cliente.id);
+    const historicoConversa = await formatarHistoricoParaGemini(cliente.id);
+
+    const contexto = {
+      nome: cliente.nome,
+      servicoPendente,
+      promocoesAtivas,
+    };
+
+    const respostaCompleta = await gerarResposta(textoTranscrito, historicoConversa, contexto);
+
+    const infoExtraida = extrairInfoDaResposta(respostaCompleta);
+    if (infoExtraida) {
+      await processarInfoExtraida(cliente, servicoPendente, infoExtraida);
+    }
+
+    const respostaFinal = limparRespostaParaCliente(respostaCompleta);
+
+    await salvarMensagem(cliente.id, 'assistant', respostaFinal);
+    await simularDigitacao(sock, sender, respostaFinal);
+    await sock.sendMessage(sender, { text: respostaFinal });
+
+    console.log(`[${telefone}] Resposta enviada (Áudio→Groq)`);
+  } catch (error) {
+    console.error('Erro ao processar áudio:', error);
+    await sock.sendMessage(sender, {
+      text: 'Não consegui processar o áudio. Pode mandar por texto? 😊',
+    });
+  }
+}
+
+/**
  * Handler principal de mensagens
  */
 async function handleMessage(sock, msg) {
@@ -358,10 +438,7 @@ async function handleMessage(sock, msg) {
       break;
 
     case 'audioMessage':
-      // TODO: Implementar transcrição de áudio
-      await sock.sendMessage(msg.key.remoteJid, {
-        text: 'Recebi seu áudio! Por enquanto, prefiro mensagens de texto para te atender melhor. Pode escrever?',
-      });
+      await processarMensagemAudio(sock, msg);
       break;
 
     default:

@@ -156,9 +156,49 @@ Retorne APENAS um JSON válido com:
   }
 }
 
+/**
+ * Transcreve áudio usando Whisper via Groq
+ * @param {Buffer} audioBuffer - Buffer do arquivo de áudio
+ * @param {string} mimeType - Tipo MIME (audio/ogg, audio/mp4, etc)
+ * @returns {Promise<string|null>} - Texto transcrito ou null se falhar
+ */
+async function transcreverAudio(audioBuffer, mimeType = 'audio/ogg') {
+  try {
+    // A API de transcrição do Groq usa multipart/form-data
+    // Precisamos criar um FormData com o arquivo de áudio
+    const { Blob } = require('buffer');
+    const blob = new Blob([audioBuffer], { type: mimeType });
+
+    const formData = new FormData();
+    formData.append('file', blob, 'audio.ogg');
+    formData.append('model', 'whisper-large-v3');
+    formData.append('language', 'pt');
+
+    const response = await fetch('https://api.groq.com/openai/v1/audio/transcriptions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+      },
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const error = await response.text();
+      throw new Error(`Groq Whisper error: ${response.status} - ${error}`);
+    }
+
+    const data = await response.json();
+    return data.text || null;
+  } catch (error) {
+    console.error('Erro ao transcrever áudio:', error);
+    return null;
+  }
+}
+
 module.exports = {
   gerarResposta,
   analisarImagem,
+  transcreverAudio,
   extrairIntencao,
   MODELO,
 };
