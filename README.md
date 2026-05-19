@@ -1,4 +1,6 @@
-# Bot WhatsApp - JP empresa Teste
+# Bot WhatsApp — JP Empresa
+
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white) ![Google Gemini](https://img.shields.io/badge/Gemini-AI-4285F4?logo=google&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white) ![Baileys](https://img.shields.io/badge/Baileys-WhatsApp-25D366?logo=whatsapp&logoColor=white) ![Licença](https://img.shields.io/badge/licença-ISC-blue)
 
 Bot de WhatsApp automatizado para atendimento de clientes, com integração de IA (Google Gemini) para conversação natural, análise de imagens e agendamento automático.
 
@@ -13,13 +15,13 @@ Bot de WhatsApp automatizado para atendimento de clientes, com integração de I
 - Promoções automáticas (6 meses e anual)
 - Rate limiting para proteção contra abuso
 
-## Tecnologias
+## Stack
 
-- **Node.js** - Runtime
-- **Baileys** - API não-oficial do WhatsApp
-- **Google Gemini** - IA para conversação e análise de imagens
-- **Supabase** - Banco de dados PostgreSQL
-- **node-cron** - Agendamento de tarefas
+- **Node.js** — Runtime
+- **Baileys** — API não-oficial do WhatsApp
+- **Google Gemini** — IA para conversação e análise de imagens
+- **Supabase** — Banco de dados PostgreSQL
+- **node-cron** — Agendamento de tarefas
 
 ## Estrutura
 
@@ -44,10 +46,10 @@ src/
     ├── helpers.js        # Funções auxiliares
     ├── precos.js         # Tabela de preços
     ├── rateLimit.js      # Proteção contra abuso
-    └── respostasAutomaticas.js  # Respostas sem IA
+    └── respostasAutomaticas.js
 
 database/
-└── schema.sql            # SQL para criar tabelas
+└── schema.sql            # SQL para criar as tabelas
 ```
 
 ## Instalação
@@ -68,15 +70,13 @@ npm install
 ### 3. Configure o Supabase
 
 1. Crie um projeto em [supabase.com](https://supabase.com)
-2. Vá em **SQL Editor**
-3. Execute o conteúdo de `database/schema.sql`
-4. Copie a URL e ANON KEY em **Settings > API**
+2. Vá em **SQL Editor** e execute `database/schema.sql`
+3. Copie a URL e a ANON KEY em **Settings > API**
 
 ### 4. Configure o Gemini
 
 1. Acesse [aistudio.google.com](https://aistudio.google.com)
-2. Clique em **Get API Key**
-3. Crie e copie a chave
+2. Clique em **Get API Key** e copie a chave
 
 ### 5. Configure as variáveis de ambiente
 
@@ -96,19 +96,18 @@ npm run dev
 
 ### 7. Conecte o WhatsApp
 
-1. Escaneie o QR code que aparece no terminal
-2. Use o WhatsApp do celular que será o "bot"
+Escaneie o QR Code exibido no terminal com o WhatsApp que será usado como bot.
 
 ## Uso
 
-Após conectar, o bot responde automaticamente às mensagens:
+Após conectar, o bot responde automaticamente:
 
 - **Saudações** → Resposta automática
-- **Perguntas sobre preço** → Coleta informações
-- **Envio de fotos** → Analisa e dá estimativa
-- **Agendamento** → Registra no banco
+- **Perguntas sobre preço** → Coleta informações do cliente
+- **Envio de fotos** → Analisa e fornece estimativa
+- **Agendamento** → Registra no banco de dados
 
-## Limites (Rate Limiting)
+## Rate Limiting
 
 | Tipo | Por minuto | Por hora |
 |------|------------|----------|
@@ -119,6 +118,7 @@ Após conectar, o bot responde automaticamente às mensagens:
 ## Tabela de Preços Base
 
 ### Sofá
+
 | Lugares | Preço |
 |---------|-------|
 | 1 (poltrona) | R$ 80 |
@@ -128,9 +128,10 @@ Após conectar, o bot responde automaticamente às mensagens:
 | 5 | R$ 250 |
 | 6+ | R$ 300 |
 
-Adicionais: Couro (+R$30), Manchas (+R$30), Pet (+R$25)
+Adicionais: Couro (+R$ 30), Manchas (+R$ 30), Pet (+R$ 25)
 
 ### Ar-condicionado
+
 | Tipo | Preço |
 |------|-------|
 | Split | R$ 120 |
