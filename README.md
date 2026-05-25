@@ -142,3 +142,9 @@ Adicionais: Couro (+R$ 30), Manchas (+R$ 30), Pet (+R$ 25)
 ## Licença
 
 ISC
+
+
+## Contribuindo / Contributing
+
+Contribuições são bem-vindas! Abra uma issue ou envie um pull request.  
+Contributions are welcome! Feel free to open an issue or submit a pull request.
