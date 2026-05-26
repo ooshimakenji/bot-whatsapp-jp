@@ -18,7 +18,7 @@ Bot de WhatsApp automatizado para atendimento de clientes, com integração de I
 ## Stack
 
 - **Node.js** — Runtime
-- **Baileys** — API não-oficial do WhatsApp
+- **Baileys** — API não oficial do WhatsApp
 - **Google Gemini** — IA para conversação e análise de imagens
 - **Supabase** — Banco de dados PostgreSQL
 - **node-cron** — Agendamento de tarefas
