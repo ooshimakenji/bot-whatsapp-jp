@@ -2,11 +2,11 @@
 
 ![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white) ![Google Gemini](https://img.shields.io/badge/Gemini-AI-4285F4?logo=google&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white) ![Baileys](https://img.shields.io/badge/Baileys-WhatsApp-25D366?logo=whatsapp&logoColor=white) ![Licença](https://img.shields.io/badge/licença-ISC-blue)
 
-Bot de WhatsApp automatizado para atendimento de clientes, com integração de IA (Google Gemini) para conversação natural, análise de imagens e agendamento automático.
+Bot de WhatsApp para atendimento automatizado de clientes, integrado ao Google Gemini para conversas naturais, análise de imagens e agendamento de visitas.
 
 ## Funcionalidades
 
-- Atendimento automático 24/7 com IA (Gemini)
+- Atendimento automatizado 24 horas por dia com IA (Gemini)
 - Respostas automáticas para perguntas frequentes
 - Análise de imagens (sofá, ar-condicionado) com estimativa de preço
 - Coleta de dados do cliente para orçamento
