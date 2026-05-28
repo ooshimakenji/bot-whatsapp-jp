@@ -1,26 +1,27 @@
 # Bot WhatsApp — JP Empresa
 
-![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white) ![Google Gemini](https://img.shields.io/badge/Gemini-AI-4285F4?logo=google&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white) ![Baileys](https://img.shields.io/badge/Baileys-WhatsApp-25D366?logo=whatsapp&logoColor=white) ![Licença](https://img.shields.io/badge/licença-ISC-blue)
+![Node.js](https://img.shields.io/badge/Node.js-18+-339933?logo=node.js&logoColor=white) ![Groq](https://img.shields.io/badge/Groq-Llama-F54F3B?logo=groq&logoColor=white) ![Supabase](https://img.shields.io/badge/Supabase-PostgreSQL-3ECF8E?logo=supabase&logoColor=white) ![Baileys](https://img.shields.io/badge/Baileys-WhatsApp-25D366?logo=whatsapp&logoColor=white) ![Licença](https://img.shields.io/badge/licença-ISC-blue)
 
-Bot de WhatsApp para atendimento automatizado de clientes, integrado ao Google Gemini para conversas naturais, análise de imagens e agendamento de visitas.
+Bot de WhatsApp para atendimento automatizado de clientes, integrado ao Groq (Llama) para conversas naturais, análise de imagens e agendamento de visitas.
 
 ## Funcionalidades
 
-- Atendimento automatizado 24 horas por dia com IA (Gemini)
+- Atendimento automatizado 24 horas com IA (Gemini)
 - Respostas automáticas para perguntas frequentes
 - Análise de imagens (sofá, ar-condicionado) com estimativa de preço
-- Coleta de dados do cliente para orçamento
+- Coleta de dados do cliente para geração de orçamento
 - Agendamento automático de visitas
-- Lembretes automáticos (1 dia e 1 hora antes)
-- Promoções automáticas (6 meses e anual)
+- Lembretes automáticos (1 dia e 1 hora antes do horário)
+- Campanhas promocionais automáticas (6 meses e anual)
 - Rate limiting para proteção contra abuso
 
 ## Stack
 
 - **Node.js** — Runtime
-- **Baileys** — API não oficial do WhatsApp
-- **Google Gemini** — IA para conversação e análise de imagens
+- **Baileys** — API não-oficial do WhatsApp (sem Puppeteer)
+- **Groq** — IA para conversação (Llama 3.1 8B) e análise de imagens (Llama 3.2 90B Vision)
 - **Supabase** — Banco de dados PostgreSQL
+- **Express** — Servidor HTTP com endpoint `/health`
 - **node-cron** — Agendamento de tarefas
 
 ## Estrutura
@@ -37,12 +38,12 @@ src/
 │   ├── historico.js      # Histórico de mensagens
 │   └── promocao.js       # Promoções
 ├── services/
-│   ├── gemini.js         # Integração Gemini
+│   ├── groq.js           # Integração Groq (texto + visão)
 │   ├── supabase.js       # Cliente Supabase
 │   ├── whatsapp.js       # Conexão WhatsApp
 │   └── scheduler.js      # Agendamentos (cron)
 └── utils/
-    ├── prompts.js        # Prompts do Gemini
+    ├── prompts.js        # Prompts e persona do bot
     ├── helpers.js        # Funções auxiliares
     ├── precos.js         # Tabela de preços
     ├── rateLimit.js      # Proteção contra abuso
@@ -73,17 +74,17 @@ npm install
 2. Vá em **SQL Editor** e execute `database/schema.sql`
 3. Copie a URL e a ANON KEY em **Settings > API**
 
-### 4. Configure o Gemini
+### 4. Configure o Groq
 
-1. Acesse [aistudio.google.com](https://aistudio.google.com)
-2. Clique em **Get API Key** e copie a chave
+1. Acesse [console.groq.com](https://console.groq.com)
+2. Crie uma API Key e copie
 
 ### 5. Configure as variáveis de ambiente
 
 Crie um arquivo `.env` na raiz:
 
 ```env
-GEMINI_API_KEY=sua_chave_gemini
+GROQ_API_KEY=sua_chave_groq
 SUPABASE_URL=https://xxx.supabase.co
 SUPABASE_ANON_KEY=sua_chave_supabase
 ```
@@ -91,21 +92,28 @@ SUPABASE_ANON_KEY=sua_chave_supabase
 ### 6. Execute
 
 ```bash
-npm run dev
+npm run dev    # desenvolvimento com hot reload (nodemon)
+npm start      # produção
 ```
 
 ### 7. Conecte o WhatsApp
 
-Escaneie o QR Code exibido no terminal com o WhatsApp que será usado como bot.
+Escaneie o QR code exibido no terminal com o WhatsApp que será usado como bot.
+
+A sessão é salva em `auth_info/` — não é necessário escanear novamente após a primeira conexão.
 
 ## Uso
 
-Após conectar, o bot responde automaticamente:
+Após conectar, o bot responde automaticamente a:
 
 - **Saudações** → Resposta automática
 - **Perguntas sobre preço** → Coleta informações do cliente
-- **Envio de fotos** → Analisa e fornece estimativa
-- **Agendamento** → Registra no banco de dados
+- **Envio de fotos** → Analisa e fornece estimativa de preço
+- **Agendamento** → Registra a visita no banco de dados
+
+## Reconexão Automática
+
+O bot reconecta automaticamente em caso de queda de conexão. A sessão é encerrada somente se o dispositivo for desvinculado manualmente pelo WhatsApp.
 
 ## Rate Limiting
 
@@ -128,7 +136,7 @@ Após conectar, o bot responde automaticamente:
 | 5 | R$ 250 |
 | 6+ | R$ 300 |
 
-Adicionais: Couro (+R$ 30), Manchas (+R$ 30), Pet (+R$ 25)
+Adicionais: Couro (+R$ 30), Manchas (+R$ 30), Pelos de pet (+R$ 25)
 
 ### Ar-condicionado
 
@@ -142,7 +150,6 @@ Adicionais: Couro (+R$ 30), Manchas (+R$ 30), Pet (+R$ 25)
 ## Licença
 
 ISC
-
 
 ## Contribuindo / Contributing
 
